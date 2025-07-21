@@ -302,3 +302,32 @@ match nombre {
     _ => println!("nada"),
 }
 ```
+
+## Fichiers
+
+### Ecriture dans un fichier
+
+```rust
+use std::fs::File;
+use std::io::{self, Write};
+
+fn main() -> io::Result<()> {
+    let mut file = File::create("output.txt")?;
+
+    file.write_all(b"Hello, world!")?;
+    file.write_all(b"\nThis is a test file.")?;
+
+    println!("File written successfully!");
+
+    Ok(())
+}
+```
+
+ne pas utiliser "é" dans le texte, car cela peut causer des problèmes d'encodage si le fichier est ouvert dans un éditeur qui ne supporte pas l'UTF-8. (code ASCII seul)
+
+`Ok(());` signifie que la fonction `main` s'est exécutée avec succès et a retourné un résultat vide.
+
+`Err(e);` signifie que la fonction `main` s'est terminée avec une erreur et a retourné un résultat contenant l'erreur.
+
+io::Result<()> est un type de résultat qui peut être soit Ok(()), soit Err(e). Il est utilisé pour gérer les erreurs lors de l'écriture dans un fichier.
+
