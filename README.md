@@ -331,3 +331,22 @@ ne pas utiliser "é" dans le texte, car cela peut causer des problèmes d'encoda
 
 io::Result<()> est un type de résultat qui peut être soit Ok(()), soit Err(e). Il est utilisé pour gérer les erreurs lors de l'écriture dans un fichier.
 
+### Lecture d'un fichier
+
+```rust
+use std::fs::File;
+use std::io::{self, BufReader, Read};
+fn main() -> io::Result<()> {
+    let file = File::open("output.txt")?;
+    let mut reader = BufReader::new(file);
+    let mut contents = String::new();
+
+    reader.read_to_string(&mut contents)?;
+
+    println!("File contents:\n{}", contents);
+
+    Ok(())
+}
+```
+
+
