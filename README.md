@@ -1,64 +1,104 @@
-cargo build  : compile le projet mode debug par defaut
-cargo check   : vérifie le code sans produire de binaire
-cargo update  met à jour les dépendances
-cargo doc --open  : gènère la documentation et l'ouvre dans le navigateur Web
-cargo run : compile et exécute le projet
+# Rust - Guide de Référence
 
-u32 = entier non signé sur 32 bits ( valeurs positives)
-rust comprend que c'est un entier par défaut i32 quand on affecte a une variable une valeur comme 72
+## Commandes Cargo
 
-pour déclarer les variables il faut utiliser les snake_case ( par convention de RUST ) et surtout ne jamais commencer par chiffre, pas d'espaces ni tirets 
+| Commande | Description |
+|----------|-------------|
+| `cargo build` | Compile le projet en mode debug par défaut |
+| `cargo check` | Vérifie le code sans produire de binaire |
+| `cargo update` | Met à jour les dépendances |
+| `cargo doc --open` | Génère la documentation et l'ouvre dans le navigateur Web |
+| `cargo run` | Compile et exécute le projet |
 
+## Types de Données
 
-i32    32   signé   -2xxx  à 2xxxxxxx
-u32     32   non signé       0 à 4 xxxxxxx
-i64     64     signé         très grand intervalle
-u8    8     non signé      à à 255 
+### Types Entiers
 
-les fonctions  : 
-       fn définit une fonction 
-       &str est de type de chaine de caractères ( référence)
-       on cree une fonction addtion() qui retourne une somme et on l'appelle depuis le main
+| Type | Taille | Signé | Plage |
+|------|--------|-------|--------|
+| `i32` | 32 bits | Oui | -2,147,483,648 à 2,147,483,647 |
+| `u32` | 32 bits | Non | 0 à 4,294,967,295 |
+| `i64` | 64 bits | Oui | Très grand intervalle |
+| `u8` | 8 bits | Non | 0 à 255 |
 
-Les conditions :
-         let nombre = 16;
-          if nombre %2 == 0 {
-            println!("Pair");
-          } else {
-             println!("Impair");
-          }
+**Note :** Rust utilise `i32` par défaut pour les entiers. Utilisez `snake_case` pour nommer les variables (convention Rust).
 
-Les boucles :
-         for i in 1..=10{
-            println!(" i vaut {}", i);
-         }
+## Fonctions
 
-         // A noter que  1..5
-         //  ..  intervalle exculsif ( fin exclue ) : 1,2,3,4
-         // ..=  intervalle inclusif ( fin incluse ) : 1,2,3,4,5
+```rust
+fn addition(a: i32, b: i32) -> i32 {
+    a + b
+}
 
-Tableaux :
-        iterer sur un tableau :
-            let  voitures = ["jeep", "renault", "bmw"];
-            for voiture in voitures {
-                println!("Voiture : {}", voiture);
-            }
+fn main() {
+    let resultat = addition(5, 3);
+    println!("Résultat: {}", resultat);
+}
+```
 
-        Utiliser tab.iter().enumerate() pour parcourir par index et valeur (key and value)
-            for (i,voiture) in voitures.iter().enumerate(){
-                println!("Index {} : {}", i, voiture);
-            }
-            iter(): crée un itérateur sur la collection sans le consommer
-            enumerate: transforme l'itérateur en une séquence de index,valeur
-        
-Vecteurs :
-        let noms = vec![String::from("Kevin"), String::from("Nourdine")];
-        for(i,nom) in noms.iter().enumerate(){
-            println!("Nom {} :{}", i, nom);
-        }
+- `fn` définit une fonction
+- `&str` est un type de chaîne de caractères (référence)
 
+## Structures de Contrôle
 
-    Exemple d'utilisation de la focntion enumerate dans un cas reel :
-        - afficher un menu de choix
+### Conditions
 
+```rust
+let nombre = 16;
+if nombre % 2 == 0 {
+    println!("Pair");
+} else {
+    println!("Impair");
+}
+```
 
+### Boucles
+
+```rust
+for i in 1..=10 {
+    println!("i vaut {}", i);
+}
+```
+
+**Intervalles :**
+- `1..5` : intervalle exclusif (fin exclue) → 1, 2, 3, 4
+- `1..=5` : intervalle inclusif (fin incluse) → 1, 2, 3, 4, 5
+
+## Collections
+
+### Tableaux
+
+#### Itération simple
+```rust
+let voitures = ["jeep", "renault", "bmw"];
+for voiture in voitures {
+    println!("Voiture : {}", voiture);
+}
+```
+
+#### Itération avec index
+```rust
+for (i, voiture) in voitures.iter().enumerate() {
+    println!("Index {} : {}", i, voiture);
+}
+```
+
+**Méthodes importantes :**
+- `iter()` : crée un itérateur sur la collection sans la consommer
+- `enumerate()` : transforme l'itérateur en séquence (index, valeur)
+
+### Vecteurs
+
+```rust
+let noms = vec![String::from("Kevin"), String::from("Nourdine")];
+for (i, nom) in noms.iter().enumerate() {
+    println!("Nom {} : {}", i, nom);
+}
+```
+
+## Exemple Pratique
+
+La fonction `enumerate()` est particulièrement utile pour :
+- Afficher un menu de choix
+- Créer des listes numérotées
+- Associer des indices à des valeurs
