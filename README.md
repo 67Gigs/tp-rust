@@ -23,6 +23,60 @@
 
 **Note :** Rust utilise `i32` par défaut pour les entiers. Utilisez `snake_case` pour nommer les variables (convention Rust).
 
+### Types Flottants
+
+| Type | Taille | Plage |
+|------|--------|-------|
+| `f32` | 32 bits | ±3.4 × 10^38 (précision de 6-7 chiffres) |
+| `f64` | 64 bits | ±1.7 × 10^308 (précision de 15-16 chiffres) |
+**Note :** Utilisez `f64` par défaut pour les flottants.
+
+### Booléens
+
+| Type | Valeurs |
+|------|---------|
+| `bool` | `true` ou `false` |
+
+### Caractères
+
+| Type | Description |
+|------|-------------|
+| `char` | Représente un caractère Unicode (4 octets) |
+| Exemple | `'a'`, `'1'`, `'\n'` |
+
+### Chaînes de Caractères
+
+| Type | Description |
+|------|-------------|
+| `String` | Chaîne de caractères mutable, allouée dynamiquement |
+| `&str` | Chaîne de caractères immuable, référence à une chaîne |
+| Exemple | `String::from("Hello")`, `"Hello"` |
+
+### Tuples
+
+| Type | Description |
+|------|-------------|
+| Tuple | Groupe de valeurs de types différents |
+| Exemple | `(1, "Hello", 3.14)` |
+| Accès | `let (x, y, z) = tuple; println!("x: {}, y: {}, z: {}", x, y, z);` |
+
+## Variables et Immutabilité
+
+En Rust, les variables sont immuables par défaut. Pour déclarer une variable mutable, utilisez le mot-clé `mut` :
+
+```rust
+let mut x = 5; // x est mutable
+x = 10; // On peut modifier x
+println!("x: {}", x);
+```
+
+```rust
+let y:[i32;4] = [1,2,3,4]; // y est un tableau immuable
+let mut z:[i32;4] = [1,2,3,4]; // z est un tableau mutable
+z[0] = 10; // On peut modifier z
+println!("z: {:?}", z);
+```
+
 ## Fonctions
 
 ```rust
@@ -54,6 +108,8 @@ if nombre % 2 == 0 {
 
 ### Boucles
 
+#### Boucle for classique
+
 ```rust
 for i in 1..=10 {
     println!("i vaut {}", i);
@@ -61,14 +117,39 @@ for i in 1..=10 {
 ```
 
 **Intervalles :**
+
 - `1..5` : intervalle exclusif (fin exclue) → 1, 2, 3, 4
 - `1..=5` : intervalle inclusif (fin incluse) → 1, 2, 3, 4, 5
+
+#### Boucle Loop
+
+```rust
+let mut compteur = 0;
+loop {
+    println!(" Compteur: {}", compteur);
+    compteur+=1;
+    if compteur == ! {
+        break; // On sort de la boucle quand le compteur atteint 3
+    }
+}
+```
+
+#### Boucle While
+
+```rust
+let mut compteur2 = 0;
+while compteur2 < 4 {
+    println!(" Compteur 2: {}", compteur2);
+    compteur+=1;
+}
+```
 
 ## Collections
 
 ### Tableaux
 
 #### Itération simple
+
 ```rust
 let voitures = ["jeep", "renault", "bmw"];
 for voiture in voitures {
@@ -77,15 +158,34 @@ for voiture in voitures {
 ```
 
 #### Itération avec index
+
 ```rust
 for (i, voiture) in voitures.iter().enumerate() {
     println!("Index {} : {}", i, voiture);
 }
 ```
 
+#### Itération sur les références aux elements du tableau
+
+```rust
+for &elt in &tab {
+    println!("l'element est {}", elt);
+}
+```
+
 **Méthodes importantes :**
+
 - `iter()` : crée un itérateur sur la collection sans la consommer
 - `enumerate()` : transforme l'itérateur en séquence (index, valeur)
+
+#### Warning lors de l'utilisation des tableaux quand un tableau n'est pas utilisé (pour debug)
+
+Ajouter _ devant la variable :
+
+```rust
+let tab:[i32;4] = [1,2,3,4];
+let _tab2:[i32;4] = [1,2,3,4];
+```
 
 ### Vecteurs
 
@@ -99,6 +199,106 @@ for (i, nom) in noms.iter().enumerate() {
 ## Exemple Pratique
 
 La fonction `enumerate()` est particulièrement utile pour :
+
 - Afficher un menu de choix
 - Créer des listes numérotées
 - Associer des indices à des valeurs
+
+## Les structure (struct)
+
+```rust
+struct Salarie {
+    nom: String,
+    ville: String,
+    age: u32
+}
+```
+
+### Usage d'une structure => on crée une instance de la structure
+
+```rust
+let kevin = Salarie {
+    nom:String::from("kevin"),
+    ville:String::from("Lyon"),
+    age:25
+};
+
+println!("Nom :{}, Ville :{}, Age :{}", kevin.nom, kevin.ville, kevin.age);
+```
+
+### Fonctions associées aux structures
+
+pour utiliser des fonctions associées à une structure, on utilise `impl` :
+
+```rust
+impl Salarie {
+    fn afficher(&self) {
+        println!("Nom :{}, Ville :{}, Age :{}", self.nom, self.ville, self.age);
+    }
+}
+fn main() {
+    let kevin = Salarie {
+        nom: String::from("Kevin"),
+        ville: String::from("Lyon"),
+        age: 25,
+    };
+    
+    kevin.afficher();
+}
+```
+
+il faut ajouter `&self` pour accéder aux attributs de la structure.
+ceci est similaire à `this` en JavaScript ou `self` en Python.
+ceci est un emprunt immuable, donc on ne peut pas modifier les attributs de la structure.
+
+#### Exemples
+
+```rust
+struct Compteur {
+    value: u32
+}
+
+impl Compteur {
+    fn afficher(&self) {
+        println!("Compteur : {}", self.value);
+    }
+
+    fn increment(&mut self) {
+        self.value += 1;
+    }
+
+    fn deplacer(self) {
+        println!("Déplacement du compteur : {}", self.value);
+    }
+}
+
+fn main() {
+    let mut compteur = Compteur { value: 0 };
+    
+    compteur.afficher(); // Affiche 0
+    compteur.increment(); // Incrémente de 1
+    compteur.afficher(); // Affiche 1
+    
+    compteur.deplacer(); // Déplace le compteur
+
+    // compteur.afficher(); // Erreur : `compteur` n'est plus valide après `deplacer`
+}
+```
+
+&variable permet de faire un emprunt immuable, ce qui signifie que la fonction peut lire les données mais ne peut pas les modifier.
+&mut variable permet de faire un emprunt mutable, ce qui signifie que la fonction peut lire et modifier les données.
+variable permet de prendre possession des données, ce qui signifie que la fonction peut lire et modifier les données, mais la variable d'origine n'est plus valide.
+
+## Equivalent du switch en rust : match
+
+```rust
+let nombre = 5;
+
+match nombre {
+    1 => println!("1"),
+    2 => println!("2"),
+    3 => println!("3"),
+    4 => println!("4"),
+    _ => println!("nada"),
+}
+```
