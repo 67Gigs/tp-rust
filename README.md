@@ -431,3 +431,106 @@ fn greetings(msg: String) {
 }
 ```
 
+## Programmation Asynchrone avec Tokio
+
+La programmation asynchrone permet d'exécuter plusieurs tâches de manière concurrente sans bloquer le thread principal. Rust utilise la bibliothèque `tokio` pour la programmation asynchrone.
+
+### Configuration
+
+Ajoutez tokio à votre `Cargo.toml` :
+
+```toml
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+```
+
+### Fonction Asynchrone
+
+Les fonctions asynchrones sont déclarées avec le mot-clé `async` et retournent une `Future` :
+
+```rust
+use tokio::time::{sleep, Duration};
+
+// Créer une fonction asynchrone et futures 
+async fn task(nom: &str, duree: u64) -> String {
+    println!("Début de la tâche : {}", nom);
+    sleep(Duration::from_secs(duree)).await;
+    println!("Fin de tâche : {}", nom);
+    format!("Résultat de {}", nom)
+}
+```
+
+**Points clés :**
+
+- `async fn` : déclare une fonction asynchrone
+- `await` : attend la completion d'une future
+- `sleep()` : simule une opération qui prend du temps
+
+### Exécution Séquentielle
+
+```rust
+#[tokio::main] // Indique que la fonction main est asynchrone 
+async fn main() {
+    let debut = std::time::Instant::now();
+
+    println!("Début de mon programme !");
+    
+    // Je crée une fonction asynchrone qui attend 3 secondes 
+    sleep(Duration::from_secs(3)).await;
+    println!("Fin du programme après 3 secondes"); 
+    
+    let resultat = task("Task1", 5).await;
+    println!("Résultat 1 reçu : {}", resultat); 
+    
+    let resultat2 = task("Task2", 5).await;
+    println!("Résultat 2 reçu : {}", resultat2); 
+    
+    let resultat3 = task("Task3", 10).await;
+    println!("Résultat 3 reçu : {}", resultat3); 
+
+    println!("Temps total : {:?}", debut.elapsed()); 
+}
+```
+
+**Résultat :** Les tâches s'exécutent l'une après l'autre (3 + 5 + 5 + 10 = 23 secondes).
+
+### Exécution Parallèle avec `join!`
+
+Pour exécuter plusieurs tâches en parallèle, utilisez `tokio::join!` :
+
+```rust
+#[tokio::main]
+async fn main() {
+    let debut = std::time::Instant::now();
+
+    // Lancer 3 tâches en parallèle
+    let (res1, res2, res3) = tokio::join!(
+        task("Task1", 3),
+        task("Task2", 5),
+        task("Task3", 3)
+    );
+
+    println!("Résultat 1 : {}", res1);
+    println!("Résultat 2 : {}", res2);
+    println!("Résultat 3 : {}", res3);
+
+    println!("Temps total : {:?}", debut.elapsed());
+}
+```
+
+**Résultat :** Les tâches s'exécutent en parallèle (temps total ≈ 5 secondes, la tâche la plus longue).
+
+### Concepts Importants
+
+| Concept | Description |
+|---------|-------------|
+| `async/await` | Syntaxe pour la programmation asynchrone |
+| `Future` | Représente une valeur qui sera disponible dans le futur |
+| `tokio::join!` | Attend que toutes les futures se terminent |
+| `#[tokio::main]` | Macro pour transformer `main` en fonction asynchrone |
+
+### Avantages de l'Asynchrone
+
+- **Performance** : Utilisation efficace des ressources
+- **Concurrence** : Plusieurs tâches peuvent s'exécuter "simultanément"
+- **Scalabilité** : Peut gérer des milliers de tâches concurrentes

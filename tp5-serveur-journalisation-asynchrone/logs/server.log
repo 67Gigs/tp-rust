@@ -17,3 +17,21 @@
 [2025-07-24 15:31:38.689] Client-00000001: da
 [2025-07-24 15:31:42.035] Client-00000001: dadada
 [2025-07-24 15:32:24.164] Client-SYSTEM: Arrêt du serveur
+[2025-07-24 16:12:15.268] Client-SYSTEM: Serveur démarré sur 127.0.0.1:8080
+[2025-07-24 16:12:44.537] Client-00000001: Connexion établie depuis 127.0.0.1:52094
+[2025-07-24 16:12:46.146] Client-00000002: Connexion établie depuis 127.0.0.1:52096
+[2025-07-24 16:12:57.185] Client-00000002: 
+[2025-07-24 16:12:58.419] Client-00000002: 
+[2025-07-24 16:12:59.245] Client-00000002: 
+[2025-07-24 16:13:00.850] Client-00000002: jkjkjkj
+[2025-07-24 16:13:02.562] Client-00000002: jkjkjkjkjkjkjkj
+[2025-07-24 16:13:13.577] Client-00000001: lpppppppppppppppp
+[2025-07-24 16:13:18.707] Client-00000001: ppipipipipip
+[2025-07-24 17:38:23.045] Client-SYSTEM: Arrêt du serveur
+[2025-07-24 17:38:27.606] Client-SYSTEM: Serveur démarré sur 127.0.0.1:8080
+[2025-07-24 17:38:42.308] Client-00000001: Connexion établie depuis 127.0.0.1:57541
+[2025-07-24 17:38:43.699] Client-00000002: Connexion établie depuis 127.0.0.1:57542
+[2025-07-24 17:38:49.102] Client-00000002: bonjour
+[2025-07-24 17:39:08.909] Client-00000001: jsp
+[2025-07-24 17:39:09.685] Client-00000001: test
+[2025-07-24 17:39:24.672] Client-SYSTEM: Arrêt du serveur
