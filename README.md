@@ -349,4 +349,85 @@ fn main() -> io::Result<()> {
 }
 ```
 
+## Heures et Dates
+
+```rust
+let now = Utc::now();
+println!("Current time: {}", now);
+```
+
+l'heure affichée est en UTC, donc dans le format : `2023-10-01 12:34:56.45454545 UTC`.
+
+pour le format FR ou FR + heure locale, on peut le formater de telle manière :
+
+```rust
+let now = Utc::now();
+println!("Current time: {}", now.format("%Y-%m-%d %H:%M:%S").to_string());
+```
+
+## Ownership et membership
+
+## Ownership et Membership
+
+### 1. Ownership (Propriété)
+
+- Chaque valeur a un propriétaire unique, responsable de libérer la mémoire
+- Lorsqu'elle sort du scope
+- Quand le propriétaire est déplacé, l'ancien propriétaire ne peut plus y accéder
+- Quand le propriétaire sort du scope, la valeur est automatiquement libérée
+
+**Exemple :**
+
+```rust
+let prenom = String::from("Noureddine"); // prenom est propriétaire de la String
+let secu = String::from("1897272824252");
+let prenom2 = prenom.clone();
+
+greetings(prenom); // propriétaire est transféré à la fonction greetings()
+println!("{}", prenom2); 
+
+greetings2(&secu);  // emprunt immuable 
+println!("{}", secu); 
+```
+
+### 2. Membership (Appartenance à une structure)
+
+Décrit quelles sont les données contenues dans une structure `Struct`.
+
+**Exemple :**
+
+```rust
+struct User {
+    nom: String,
+    secu: String,
+}
+
+let user = User {
+    nom: String::from("Alexandre"),
+    secu: String::from("1825678290 55")
+};
+
+println!("nom {}", user.nom);
+display(user);
+```
+
+### Fonctions associées
+
+```rust
+// Fonction display qui prend possession
+fn display(user: User) -> User {
+    println!("Nom: {}, num secu : {}", user.nom, user.secu);
+    user
+}
+
+// Avec emprunt & 
+fn greetings2(msg: &String) {
+    println!("Hello Mister {}", msg);
+}   
+
+// Sans emprunt
+fn greetings(msg: String) {
+    println!("Hello Mister {}", msg);
+}
+```
 
