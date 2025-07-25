@@ -193,3 +193,7 @@ pub type Clients = Arc<Mutex<HashMap<String, Client>>>;
 - Les messages sont sérialisés en JSON pour la structure
 - Le broadcasting évite les boucles infinites (pas de renvoi à l'expéditeur)
 - Gestion propre des déconnexions avec nettoyage des ressources
+
+## Screen shots
+
+![Screenshot](./assets/image.png)
