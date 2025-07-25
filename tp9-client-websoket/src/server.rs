@@ -114,7 +114,7 @@ async fn handle_connection(
     let clients_for_receiver = clients.clone();
     let tx_for_receiver = tx.clone();
     let client_id_for_receiver = client_id.clone();
-    let username_for_receiver = username.clone();
+    let mut username_for_receiver = username.clone(); // Mutable pour pouvoir le mettre à jour
 
     let receiver_task = tokio::spawn(async move {
         while let Some(msg) = ws_receiver.next().await {
@@ -130,7 +130,10 @@ async fn handle_connection(
                         if chat_msg.content.starts_with("/username ") {
                             let new_username = chat_msg.content.replace("/username ", "");
                             if !new_username.is_empty() {
-                                // Mettre à jour le nom d'utilisateur
+                                let old_username = username_for_receiver.clone();
+                                // Mettre à jour le nom d'utilisateur localement ET dans la liste des clients
+                                username_for_receiver = new_username.clone();
+                                
                                 let mut clients_guard = clients_for_receiver.lock().await;
                                 if let Some(client) = clients_guard.get_mut(&client_id_for_receiver) {
                                     client.username = new_username.clone();
@@ -141,7 +144,7 @@ async fn handle_connection(
                                     id: Uuid::new_v4().to_string(),
                                     user_id: "system".to_string(),
                                     username: "Système".to_string(),
-                                    content: format!("{} a changé son nom en {}", username_for_receiver, new_username),
+                                    content: format!("{} a changé son nom en {}", old_username, new_username),
                                     timestamp: chrono::Utc::now().timestamp() as u64,
                                     message_type: MessageType::System,
                                 };
@@ -151,6 +154,8 @@ async fn handle_connection(
                             continue;
                         }
 
+                        // Pour les messages normaux, utiliser le nom d'utilisateur local
+                        chat_msg.username = username_for_receiver.clone();
                         info!("Message reçu de {}: {}", chat_msg.username, chat_msg.content);
                         let _ = tx_for_receiver.send(chat_msg);
                     } else {

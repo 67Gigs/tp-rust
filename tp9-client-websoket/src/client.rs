@@ -37,6 +37,9 @@ impl WebSocketClient {
             while let Some(msg) = ws_receiver.next().await {
                 match msg {
                     Ok(Message::Text(text)) => {
+                        // Effacer la ligne de prompt actuelle
+                        print!("\r\x1b[2K");
+                        
                         // Tenter de parser comme ChatMessage
                         if let Ok(chat_msg) = serde_json::from_str::<ChatMessage>(&text) {
                             print_chat_message(&chat_msg);
@@ -48,11 +51,13 @@ impl WebSocketClient {
                         io::stdout().flush().unwrap();
                     }
                     Ok(Message::Binary(data)) => {
+                        print!("\r\x1b[2K");
                         println!("Données binaires reçues: {} octets", data.len());
                         print!("> ");
                         io::stdout().flush().unwrap();
                     }
                     Ok(Message::Close(_)) => {
+                        print!("\r\x1b[2K");
                         println!("Connexion fermée par le serveur");
                         break;
                     }
